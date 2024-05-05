@@ -18,7 +18,7 @@ use Yii;
  * @property Report[] $reports
  * @property Role $role
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     /**
      * {@inheritdoc}
@@ -37,7 +37,7 @@ class User extends \yii\db\ActiveRecord
             [['role_id'], 'integer'],
             [['login', 'password', 'email', 'phone', 'fio'], 'required', 'message' =>'Заполните поле'],
             [['email'],'email', 'message' =>'Email введен некорректно'],
-            [['phone'],'min'=>11, 'max'=>11, 'tooShort'=>'Сликшом короткий номер', 'tooLong'=>'Слишком длинный номер'],
+            [['phone'],'string','min'=>11, 'max'=>11, 'tooShort'=>'Сликшом короткий номер', 'tooLong'=>'Слишком длинный номер'],
             [['login', 'password', 'email', 'phone', 'fio'], 'string', 'max' => 255],
             [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::class, 'targetAttribute' => ['role_id' => 'id']],
         ];
@@ -52,6 +52,7 @@ class User extends \yii\db\ActiveRecord
             'id' => 'ID',
             'login' => 'Логин',
             'password' => 'Пароль',
+            'password_confirmation' => 'Повторите пароль',
             'email' => 'Email',
             'phone' => 'Телефон',
             'fio' => 'ФИО',

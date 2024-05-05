@@ -10,7 +10,7 @@ class UserRegister extends User {
 
            parent::rules(),
            [
-            ['password_confirmation', 'compare', 'compareAttribute'=>'password', 'message'=>'Пароли не совпадают'],
+            ['password_confirmation', 'compare', 'compareAttribute'=>'password', 'message'=>'Пароли не совпадают']
            ]
         );
     }
