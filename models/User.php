@@ -35,6 +35,9 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             [['role_id'], 'integer'],
+            [['login', 'password', 'email', 'phone', 'fio'], 'required', 'message' =>'Заполните поле'],
+            [['email'],'email', 'message' =>'Email введен некорректно'],
+            [['phone'],'min'=>11, 'max'=>11, 'tooShort'=>'Сликшом короткий номер', 'tooLong'=>'Слишком длинный номер'],
             [['login', 'password', 'email', 'phone', 'fio'], 'string', 'max' => 255],
             [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::class, 'targetAttribute' => ['role_id' => 'id']],
         ];
