@@ -1,0 +1,35 @@
+.logo {
+
+    width: 50px;
+}
+
+main > .container {
+    margin-top: 20px ;
+}
+
+.bg-dark {
+    background-color:rgb(221, 138, 13) !important;
+    
+}
+
+.bg-light {
+    background-color:rgb(221, 138, 13) !important;
+}
+
+.btn-success {
+    background-color: brown !important;
+    border: none;
+}
+
+.btn-success:hover, .btn-success:focus, .btn-success:active {
+    background-color: rgb(137, 108, 241) !important;
+    border: none;
+}
+
+a {
+    color: rgb(73, 181, 82);
+}
+
+li {
+    list-style: none;
+}
