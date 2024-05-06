@@ -33,6 +33,7 @@ class Report extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'string'],
+            [['description', 'number'], 'required', 'message'=> 'Поле не заполнено'],
             [['user_id', 'status_id'], 'integer'],
             [['number'], 'string', 'max' => 127],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
@@ -47,10 +48,12 @@ class Report extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'number' => 'Number',
-            'description' => 'Description',
-            'user_id' => 'User ID',
-            'status_id' => 'Status ID',
+            'number' => 'Номер',
+            'description' => 'Нарушение',
+            'user' => 'Пользователь',
+            'status' => 'Статус',
+            'user_id' => 'Пользователь',
+            'status_id' => 'Статус',
         ];
     }
 
