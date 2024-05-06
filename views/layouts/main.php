@@ -25,6 +25,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <head>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <link rel="stylesheet" href="/web/css/style.css">
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
@@ -32,16 +33,22 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <header id="header">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => HTML::img('@web/image/med.png', ['class'=>'logo', 'alt'=>'Логотип']),
         'brandUrl' => Yii::$app->homeUrl,
         'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Регистрация', 'url' => ['/site/register']],
+            ['label' => 'Главная', 'url' => ['/site/index']],
+            Yii::$app->user->isGuest
+            ? ['label' => 'Регистрация', 'url' => ['/site/register']]
+            :['label' => 'Заявления', 'url' => ['/report/index']],
+
+            !Yii::$app->user->isGuest && !Yii::$app->user->identity->isAdmin()
+            ? ['label' => 'Создать заявление', 'url' => ['/report/create']]
+            : '',
+            
             Yii::$app->user->isGuest
                 ? ['label' => 'Вход', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
@@ -71,8 +78,47 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <footer id="footer" class="mt-auto py-3 bg-light">
     <div class="container">
         <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-            <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+            <div class="col-md-6 text-center text-md-start">
+                <p>Контактная информация</p>
+                <ul>
+                    <li>номер телефона</li>
+                    <li>почта</li>
+                </ul>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <?php if (Yii::$app->user->isGuest) : ?>
+                    <ul>
+                        <li>
+                            <a class="nav-link" href="/site/index">Главная</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="/site/login">Вход</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="/site/register">Регистрация</a>
+                        </li>
+                    </ul>
+                    <?php elseif (Yii::$app->user->identity->isAdmin()) : ?>
+                        <ul>
+                        <li>
+                            <a class="nav-link" href="/site/index">Главная</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="/report/index">Заявления</a>
+                        </li>
+                    </ul>
+                        <?php else : ?>
+                            <li>
+                            <a class="nav-link" href="/site/index">Главная</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="/report/index">Мои Заявления</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="/report/create">Создать заявление</a>
+                        </li>
+                            <?php endif ?>
+            </div>
         </div>
     </div>
 </footer>
