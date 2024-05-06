@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Report $model */
 
-$this->title = 'Create Report';
-$this->params['breadcrumbs'][] = ['label' => 'Reports', 'url' => ['index']];
+$this->title = 'Создать заявление';
+$this->params['breadcrumbs'][] = ['label' => 'Заявления', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="report-create">
