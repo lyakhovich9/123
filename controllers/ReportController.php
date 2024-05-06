@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\Report;
 use app\models\ReportSearch;
+use app\models\Status;
+use app\models\User;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,15 +33,26 @@ class ReportController extends Controller
         );
     }
 
-    /**
-     * Lists all Report models.
-     *
-     * @return string
-     */
+  
     public function actionIndex()
     {
+        $user = User::getInstance();
+        if (!$user) 
+        {
+            return $this->goHome();
+        }
+        if ($user->isAdmin()) {
+
+            $searchModel = new ReportSearch();
+            $dataProvider = $searchModel->search($this->request->queryParams);
+    
+            return $this->render('index_admin', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
         $searchModel = new ReportSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = $searchModel->search($this->request->queryParams,$user->id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -47,31 +60,24 @@ class ReportController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Report model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
 
-    /**
-     * Creates a new Report model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
+  
     public function actionCreate()
     {
+        $user = User::getInstance();
+        if (!$user) 
+        {
+            return $this->goHome();
+        }
         $model = new Report();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                $model->status_id = Status::NEW;
+                $model->user_id = $user->id; 
+                if ($model->save()) {
+                    return $this->redirect('index');
+                  }
             }
         } else {
             $model->loadDefaultValues();
@@ -82,19 +88,18 @@ class ReportController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Report model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+  
     public function actionUpdate($id)
     {
+        $user = User::getInstance();
+        if (!$user) 
+        {
+            return $this->goHome();
+        }
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect('index');
         }
 
         return $this->render('update', [
@@ -102,27 +107,8 @@ class ReportController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Report model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
-    }
 
-    /**
-     * Finds the Report model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Report the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Report::findOne(['id' => $id])) !== null) {
