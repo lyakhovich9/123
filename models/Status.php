@@ -14,6 +14,14 @@ use Yii;
  */
 class Status extends \yii\db\ActiveRecord
 {
+    const NEW = 1;
+    const PRINYAT = 2;
+    const OTKLONENO = 3;
+
+    public function __toString()
+    {
+        return $this->status;
+    }
     /**
      * {@inheritdoc}
      */
@@ -39,7 +47,7 @@ class Status extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'status' => 'Status',
+            'status' => 'Статус',
         ];
     }
 
