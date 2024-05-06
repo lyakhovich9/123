@@ -137,4 +137,18 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return $this->password === $password;
     }
+
+    public function __toString()
+    {
+        return $this->login;
+    }
+
+    public static function getInstance(): null|User
+    { 
+        return Yii::$app->user->identity;
+    }
+
+    public function isAdmin(){
+        return $this->role_id == Role::ADMIN_ROLE_ID;
+    }
 }
