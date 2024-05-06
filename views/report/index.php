@@ -10,16 +10,12 @@ use yii\widgets\Pjax;
 /** @var app\models\ReportSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Reports';
+$this->title = 'Мои заявления';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="report-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Report', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -27,20 +23,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'summary'=>'',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'number',
             'description:ntext',
-            'user_id',
-            'status_id',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Report $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
+            'status',
         ],
     ]); ?>
 
